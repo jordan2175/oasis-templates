@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+</head>
+
+<body>
+  <h1>Setup Document</h1>
+  <p>Fill in all of the information below to setup this document.</p>
+  
+  <p><b>Full TC Name: </b><input type="text" id='tcfullname' required><br>
+  <i>For example "OASIS Cyber Threat Intelligence (CTI) TC"</i></p>
+  
+  <p><b>TC Shortname: </b><input type="text" id="tcshortname" required><br>
+  <i>For example "cti"</i></p>
+  
+  <p><b>Spec Name: </b><input type="text" id='docname' required><br>
+  <i>For example "Playbook Requirements"</i></p>
+
+  <p><b>Version: </b><input type="text" id='docver' required><br>
+  <i>For example "1.0"</i></p>
+
+  <p><b>Date: </b><input type="date" id="docdate" required></p>
+  
+  <p><label for="docstage"><b>Stage: </b></label><select id="docstage">
+    <option value="wd">Working Draft</option>
+    <option value="csd">Committee Specification Draft</option>
+    <option value="cs">Committee Specification</option>
+    <option value="cnd">Committee Note Draft</option>
+    <option value="cn">Committee Note</option>
+  </select></p>
+  
+  <p><b>Revision #: </b><input type="text" id="docrev" required></p>
+
+  <p><label for="dociprmode"><b>IPR: </b></label><select id="dociprmode">
+    <option value="na">Non-Assertion</option>
+    <option value="rflt">RF on Limited Terms</option>
+    <option value="rfrt">RF on RAND Terms</option>
+    <option value="rd">RAND</option>
+  </select></p>
+  
+  
+  
+  <button onclick='setupDocument()'>Setup Document</button></p>
+
+  <br>
+  <h1>Reset Functions</h1>
+  <p><button onclick='resetFooter()'>Reset Footer</button></p>
+
+<script>
+document.getElementById('docdate').valueAsDate = new Date();
+
+function setupDocument() {
+  var docname = document.getElementById("docname").value;
+  var docver = document.getElementById("docver").value;
+  var docstage = document.getElementById("docstage").value;
+  var docrev = document.getElementById("docrev").value;
+  var selectedDate = document.getElementById("docdate").value; // this returns yyyy-mm-dd
+  var tcfullname = document.getElementById("tcfullname").value;
+  var tcshortname = document.getElementById("tcshortname").value;
+  var dociprmode = document.getElementById("dociprmode").value;
+
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
+  
+  var dsplit = [{}];
+  dsplit = selectedDate.split("-");
+  var d = new Date(dsplit[0], dsplit[1], dsplit[2]);
+  var year = d.getFullYear();
+  var monthName = months[d.getMonth()-1];
+  var day = d.getDate();
+
+  // Add zero padding for single digit days
+  var sDay = String(day);
+  if (sDay.length === 1) {
+    sDay = "0" + sDay;
+  }
+  var docdate = `${sDay} ${monthName} ${year}`;
+
+
+  if (docname == "") {
+    alert("Document name is missing");
+    return false;
+  }
+
+  if (docver == "") {
+    alert("Document version is missing");
+    return false;
+  }
+
+  if (docrev == "") {
+    alert("Document revision is missing");
+    return false;
+  }
+
+  if (tcfullname == "") {
+    alert("TC full name is missing");
+    return false;
+  }
+
+  if (tcshortname == "") {
+    alert("TC short name is missing");
+    return false;
+  }
+
+  google.script.run.setupDocument(docname, docver, docstage, docrev, docdate, tcfullname, tcshortname, dociprmode);
+}
+
+function resetFooter() {
+  google.script.run.resetFooter();
+}
+
+</script>
+
+</body>
+</html>
+

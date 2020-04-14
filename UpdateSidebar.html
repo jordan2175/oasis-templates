@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+</head>
+
+<body>
+  <h1>Update Document</h1>
+  <p>Fill in all of the information below to update this document.</p>
+  
+  <p><b>Document Name: </b><input type="text" id='docname' required><br>
+  <i>For example "Playbook Requirements"</i></p>
+
+  <p><b>Version: </b><input type="text" id='docver' required><br>
+  <i>For example "1.0"</i></p>
+
+  <p><b>Date: </b><input type="date" id="docdate" required></p>
+  
+  <p><label for="docstage"><b>Stage: </b></label><select id="docstage">
+    <option value="wd">Working Draft</option>
+    <option value="csd">Committee Specification Draft</option>
+    <option value="cs">Committee Specification</option>
+    <option value="cnd">Committee Note Draft</option>
+    <option value="cn">Committee Note</option>
+  </select></p>
+  
+  <p><b>Revision #: </b><input type="text" id="docrev" required></p>
+  
+  <p><button onclick='sendData()'>Update Document</button></p>
+
+<script>
+document.getElementById('docdate').valueAsDate = new Date();
+
+function sendData(){
+  var docname = document.getElementById("docname").value
+  var docver = document.getElementById("docver").value
+  var docstage = document.getElementById("docstage").value
+  var docrev = document.getElementById("docrev").value
+  
+  const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+  ]
+  
+  var selectedDate = document.getElementById("docdate").value // this returns yyyy-mm-dd
+  var dsplit = [{}];
+  dsplit = selectedDate.split("-");
+  var d = new Date(dsplit[0], dsplit[1], dsplit[2])
+  var year = d.getFullYear()
+  var monthName = months[d.getMonth()-1]
+  var day = d.getDate()
+
+  // Add zero padding for single digit days
+  var sDay = String(day)
+  if (sDay.length === 1) {
+    sDay = "0" + sDay
+  }
+  var docdate = `${sDay} ${monthName} ${year}`
+
+  if (docname == "") {
+    alert("Document name is missing");
+    return false;
+  }
+
+  if (docver == "") {
+    alert("Document version is missing");
+    return false;
+  }
+
+  if (docrev == "") {
+    alert("Document revision is missing");
+    return false;
+  }
+
+  google.script.run.updateDocument(docname, docver, docstage, docrev, docdate)
+}
+
+</script>
+
+</body>
+</html>
+
