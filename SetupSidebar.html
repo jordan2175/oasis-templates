@@ -4,25 +4,36 @@
   <base target="_top">
 </head>
 
-<body>
-  <h1>Setup Document</h1>
+<body style="background-color:#f1f1f1;">
+  <h1 style="color:#446caa">Setup Document</h1>
   <p>Fill in all of the information below to setup this document.</p>
   
-  <p><b>Full TC Name: </b><input type="text" id='tcfullname' required><br>
-  <i>For example "OASIS Cyber Threat Intelligence (CTI) TC"</i></p>
+  <p style="color:#446caa"><b>Official TC Name: </b><br>
+  <i>Example "OASIS Cyber Threat Intelligence (CTI) TC"</i><br>
+  <input type="text" id='tcfullname' required><br>
+  </p>
   
-  <p><b>TC Shortname: </b><input type="text" id="tcshortname" required><br>
-  <i>For example "cti"</i></p>
+  <p style="color:#446caa"><b>TC Shortname: </b><br>
+  <i>Example "cti"</i><br>
+  <input type="text" id="tcshortname" required><br>
+  </p>
   
-  <p><b>Spec Name: </b><input type="text" id='docname' required><br>
-  <i>For example "Playbook Requirements"</i></p>
+  <p style="color:#446caa"><b>Spec Name: </b><br>
+  <i>Example "Playbook Requirements"</i><br>
+  <input type="text" id='docname' required><br>
+  </p>
 
-  <p><b>Version: </b><input type="text" id='docver' required><br>
-  <i>For example "1.0"</i></p>
+  <p style="color:#446caa"><b>Version: </b><br>
+  <i>Example "1.0"</i><br>
+  <input type="text" id='docver' required><br>
+  </p>
 
-  <p><b>Date: </b><input type="date" id="docdate" required></p>
+  <p style="color:#446caa"><b>Date: </b><br>
+  <input type="date" id="docdate" required><br>
+  </p>
   
-  <p><label for="docstage"><b>Stage: </b></label><select id="docstage">
+  <p style="color:#446caa"><label for="docstage"><b>Stage: </b></label><br>
+  <select id="docstage">
     <option value="wd">Working Draft</option>
     <option value="csd">Committee Specification Draft</option>
     <option value="cs">Committee Specification</option>
@@ -30,21 +41,23 @@
     <option value="cn">Committee Note</option>
   </select></p>
   
-  <p><b>Revision #: </b><input type="text" id="docrev" required></p>
+  <p style="color:#446caa"><b>Revision #: </b><br>
+  <i>Example "01"</i><br>
+  <input type="text" id="docrev" required><br>
+  </p>
 
-  <p><label for="dociprmode"><b>IPR: </b></label><select id="dociprmode">
+  <p style="color:#446caa"><label for="dociprmode"><b>IPR: </b></label><br>
+  <select id="dociprmode">
     <option value="na">Non-Assertion</option>
     <option value="rflt">RF on Limited Terms</option>
     <option value="rfrt">RF on RAND Terms</option>
     <option value="rd">RAND</option>
   </select></p>
   
-  
-  
   <button onclick='setupDocument()'>Setup Document</button></p>
 
   <br>
-  <h1>Reset Functions</h1>
+  <h1 style="color:#446caa">Reset Functions</h1>
   <p><button onclick='resetFooter()'>Reset Footer</button></p>
 
 <script>
@@ -126,4 +139,3 @@ function resetFooter() {
 
 </body>
 </html>
-
