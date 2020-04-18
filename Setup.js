@@ -199,13 +199,9 @@ function setupCitation(docname, docver, docstage, docrev, tcshortname) {
 function setupFooter(docname, docver, docstage, docrev, docdate) {
   var footer = doc.getFooter();
   var paragraphs = footer.getParagraphs();
-  
   var doctrack = convertStageToTrack(docstage);
   
-  // Update the first line of the footer
-  e0 = paragraphs[0];
-  
-  // Update the filename on the first line of the footer
+  // Build the filename based on provided data
   var docfilename = "";
     
   // The passed in docname will be something like "Playbook Requirements"
@@ -219,67 +215,28 @@ function setupFooter(docname, docver, docstage, docrev, docdate) {
     docfilename = docname + '-v' + docver + '-' + docstage + docrev;
   }
 
-  // Update document name
-  if (e0.findText('##docfilename##')) {
-    e0.replaceText('##docfilename##', docfilename);
-  }
-  //else {
-  //  element.replaceText('^[a-zA-Z0-9\-\.]+', docfilename);
-  //}
+  // Update the first line of the footer
+  e0 = paragraphs[0];
+
+  // Update filename name on first line of footer
+  e0.replaceText('##docfilename##', docfilename);
       
   // Update the Working Draft ##, but only if this is a WD.
   if (docstage === "wd") {
     // Update document revision
-    if (e0.findText('##docrev##')) {
-      e0.replaceText('##docrev##', docrev);
-    }
-    //else if (element.findText('Working Draft [0-9]+')) {
-    //  var n = "Working Draft " + docrev;
-    //  element.replaceText('Working Draft [0-9]+', n);
-    //}
-    //else {
-      // Add the Working Draft ## back in if it is missing
-    //  var n = docfilename + "\tWorking Draft " + docrev + "\t##docdate##";
-    //  element.replaceText('^.*$', n);
-    //}
+    e0.replaceText('##docrev##', docrev);
   }
   else {
     // Remove the Working Draft ## for CSD, CS, CND, CN, but only if it is found
-    if (e0.findText('##docrev##')) {
-      e0.replaceText('Working Draft ##docrev##', "");
-    }
-    //else if (element.findText('Working Draft [0-9]+')) {
-    //  element.replaceText('Working Draft [0-9]+', "");
-    //}
+    e0.replaceText('Working Draft ##docrev##', "");
   }
 
   // Update the document date
-  if (e0.findText('##docdate##')) {
-    e0.replaceText('##docdate##', docdate);
-  }
-  //else {
-  //  element.replaceText('\\d{2}\\s\\w+\\s\\d{4}$', docdate);
-  //}
+  e0.replaceText('##docdate##', docdate);
 
-  
-  // Update the first line of the footer
+  // Update the second line of the footer
   e1 = paragraphs[1];
   
   // Update document track type (standards track, non-standards track, standards track draft, etc)
-  if (e1.findText('##doctrack##')) {
-    e1.replaceText('##doctrack##', doctrack);
-  }
-  //else if (element.findText('Non-Standards Track Draft')) {
-  //  element.replaceText('Non-Standards Track Draft', doctrack);
-  //}
-  //else if (element.findText('Non-Standards Track')) {
-  //  element.replaceText('Non-Standards Track', doctrack);
-  //}
-  //else if (element.findText('Standards Track Draft')) {
-  //  element.replaceText('Standards Track Draft', doctrack);
-  //}
-  //else if (element.findText('Standards Track')) {
-  //  element.replaceText('Standards Track', doctrack);
-  //}
-  
+  e1.replaceText('##doctrack##', doctrack);
 }
