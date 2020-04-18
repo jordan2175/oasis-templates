@@ -7,6 +7,7 @@
 // Permissions Needed
 // View and manage Google Docs
 // Display and run third-party web content in prompts and sidebars inside Google applications
+// Some ideas from https://www.youtube.com/watch?v=2di2PC22ar0
 
 function onInstall(e) {
   onOpen(e);

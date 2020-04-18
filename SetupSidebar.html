@@ -8,24 +8,20 @@
   <h1 style="color:#446caa">Setup Document</h1>
   <p>Fill in all of the information below to setup this document.</p>
   
-  <p style="color:#446caa"><b>Official TC Name: </b><br>
-  <i>Example "OASIS Cyber Threat Intelligence (CTI) TC"</i><br>
-  <input type="text" id='tcfullname' required><br>
+  <p style="color:#446caa"><b>Official TC Name: </b> <i>(eg "OASIS Cyber Threat Intelligence (CTI) TC")</i><br>
+  <input type="text" id='tcfullname' size='40' required><br>
   </p>
   
-  <p style="color:#446caa"><b>TC Shortname: </b><br>
-  <i>Example "cti"</i><br>
+  <p style="color:#446caa"><b>TC Shortname: </b> <i>(eg "cti")</i><br>
   <input type="text" id="tcshortname" required><br>
   </p>
   
-  <p style="color:#446caa"><b>Spec Name: </b><br>
-  <i>Example "Playbook Requirements"</i><br>
-  <input type="text" id='docname' required><br>
+  <p style="color:#446caa"><b>Doc Name: </b> <i>(eg "Playbook Requirements")</i><br>
+  <input type="text" id='docname' size='40' required><br>
   </p>
 
-  <p style="color:#446caa"><b>Version: </b><br>
-  <i>Example "1.0"</i><br>
-  <input type="text" id='docver' required><br>
+  <p style="color:#446caa"><b>Version: </b> <i>(eg "1.0")</i><br>
+  <input type="text" id='docver' value="1.0" required><br>
   </p>
 
   <p style="color:#446caa"><b>Date: </b><br>
@@ -41,9 +37,8 @@
     <option value="cn">Committee Note</option>
   </select></p>
   
-  <p style="color:#446caa"><b>Revision #: </b><br>
-  <i>Example "01"</i><br>
-  <input type="text" id="docrev" required><br>
+  <p style="color:#446caa"><b>Revision #: </b> <i>(eg "01")</i><br>
+  <input type="text" id="docrev" value = "01" required><br>
   </p>
 
   <p style="color:#446caa"><label for="dociprmode"><b>IPR: </b></label><br>
@@ -88,6 +83,7 @@ function setupDocument() {
     'December'
   ];
   
+  // Format the date correctly to OASIS standard
   var dsplit = [{}];
   dsplit = selectedDate.split("-");
   var d = new Date(dsplit[0], dsplit[1], dsplit[2]);

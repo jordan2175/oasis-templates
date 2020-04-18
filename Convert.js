@@ -22,6 +22,19 @@ function convertStageToShort(docstage) {
   return stages[docstage];
 }
 
+function convertStageToTrack(docstage) {
+  var stages = { 
+    "wd" : 'Standards Track Draft', 
+    "csd" : 'Standards Track Draft',
+    "cs" : 'Standards Track',
+    "cnd" : 'Non-Standards Track Draft',
+    "cn" : 'Non-Standards Track'
+  };
+
+  return stages[docstage];
+}
+
+
 function convertMonthToNumber(month) {
   var months = { 
     "January" : "01", 

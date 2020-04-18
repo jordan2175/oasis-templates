@@ -5,8 +5,11 @@
 function setupDocument(docname, docver, docstage, docrev, docdate, tcfullname, tcshortname, dociprmode) {
   tcshortname = tcshortname.toLowerCase();
   setupFrontMatter(docname, docver, docstage, docrev, docdate, tcfullname, tcshortname);
-  setupStatusSection(tcfullname, tcshortname, dociprmode);
-  updateFooter(docname, docver, docstage, docrev, docdate);
+  setupStatusSection(tcfullname, tcshortname);
+  setupIPR(tcshortname, dociprmode);
+  setupCitation(docname, docver, docstage, docrev, tcshortname);
+  resetFooter();
+  setupFooter(docname, docver, docstage, docrev, docdate);
 }
 
 // --------------------------------------------------------------------------------
@@ -14,27 +17,7 @@ function setupDocument(docname, docver, docstage, docrev, docdate, tcfullname, t
 // This is called from the setupDocument() function
 // --------------------------------------------------------------------------------
 function setupFrontMatter(docname, docver, docstage, docrev, docdate, tcfullname, tcshortname) {
-  var docstagefull;
-  switch(docstage) {
-  case "wd":
-    docstagefull = 'Working Draft';
-    break;
-  case "csd":
-    docstagefull = 'Committee Specification Draft';
-    break;
-  case "cs":
-    docstagefull = 'Committee Specification';
-    break;
-  case "cnd":
-    docstagefull = 'Committee Note Draft';
-    break;
-  case "cn":
-    docstagefull = 'Committee Note';
-    break;
-  default:
-    docstagefull = 'Working Draft';
-  }
-
+  var docstagefull = convertStageToLong(docstage);
   
   if (body.findText('##docname##')) {
     body.replaceText('##docname##', docname);
@@ -72,7 +55,7 @@ function setupFrontMatter(docname, docver, docstage, docrev, docdate, tcfullname
 // Update the Status section based on data from the SetupSidebar
 // This is called from the setupDocument() function
 // --------------------------------------------------------------------------------
-function setupStatusSection(tcfullname, tcshortname, dociprmode) {
+function setupStatusSection(tcfullname, tcshortname) {
   
   if (body.findText('##tcstatusfullname##')) {
     body.replaceText('##tcstatusfullname##', tcfullname);
@@ -110,14 +93,12 @@ function setupStatusSection(tcfullname, tcshortname, dociprmode) {
     t.setLinkUrl(start, end, tcwebpage);
     body.replaceText('##tcwebpage##', tcwebpage);
   }
-
-  setupIPR(tcshortname, dociprmode);
 }
 
 
 // --------------------------------------------------------------------------------
-// Update the IPR section based on data from the SetupSidebar
-// This is called from the setupStatusSection() function
+// Setup the IPR section based on data from the SetupSidebar
+// This is called from the setupDocument() function
 // --------------------------------------------------------------------------------
 function setupIPR(tcshortname, dociprmode) {
   var iprname;
@@ -167,4 +148,138 @@ function setupIPR(tcshortname, dociprmode) {
     t.setLinkUrl(start, end, tciprpage);
     body.replaceText('##tciprpage##', tciprpage);
   }
+}
+
+
+// --------------------------------------------------------------------------------
+// Setup the Citation section based on data from the SetupSidebar
+// This is called from the setupDocument() function
+// --------------------------------------------------------------------------------
+function setupCitation(docname, docver, docstage, docrev, tcshortname) {
+  // The passed in docname will be something like "Playbook Requirements"
+  // We need to remove the spaces
+  docname = docname.replace(/\ /g, '-');
+  var citationName = docname + '-v' + docver;
+
+  if (body.findText('##citationlabel##')) {
+    body.replaceText('##citationlabel##', citationName);
+  }
+
+  if (body.findText('##doclink##')) {
+    var re = body.findText('##doclink##');
+    var start = re.getStartOffset();
+    var end = re.getEndOffsetInclusive();
+    var element = re.getElement();
+    var t = element.asText();
+    
+    var doclinkname = docname.toLowerCase();
+    var doclinkpage = 'https://docs.oasis-open.org/' + tcshortname + '/' + doclinkname + '/v' + docver + '/' + docstage + docrev + '/' + doclinkname + '-v' + docver + '-' + docstage + docrev + '.html';
+    t.setLinkUrl(start, end, doclinkpage);
+    body.replaceText('##doclink##', doclinkpage);
+  }
+
+  if (body.findText('##doclinklatest##')) {
+    var re = body.findText('##doclinklatest##');
+    var start = re.getStartOffset();
+    var end = re.getEndOffsetInclusive();
+    var element = re.getElement();
+    var t = element.asText();
+    
+    var doclinkname = docname.toLowerCase();
+    var doclinkpage = 'https://docs.oasis-open.org/' + tcshortname + '/' + doclinkname + '/v' + docver + '/' + doclinkname + '-v' + docver + '.html';
+    t.setLinkUrl(start, end, doclinkpage);
+    body.replaceText('##doclinklatest##', doclinkpage);
+  }
+}
+
+// --------------------------------------------------------------------------------
+// Setup the footer based on data from the sidebars
+// This is called from the updateFooter() and setupDocument() functions
+// --------------------------------------------------------------------------------
+function setupFooter(docname, docver, docstage, docrev, docdate) {
+  var footer = doc.getFooter();
+  var paragraphs = footer.getParagraphs();
+  
+  var doctrack = convertStageToTrack(docstage);
+  
+  // Update the first line of the footer
+  e0 = paragraphs[0];
+  
+  // Update the filename on the first line of the footer
+  var docfilename = "";
+    
+  // The passed in docname will be something like "Playbook Requirements"
+  // We need to make this lower case and remove the spaces
+  docname = docname.toLowerCase();
+  docname = docname.replace(/\ /g, '-');
+  if (docstage === "wd" || docstage === "csd" || docstage === "cnd") {
+    docfilename = "draft-" + docname + '-v' + docver + '-' + docstage + docrev;
+  }
+  else {
+    docfilename = docname + '-v' + docver + '-' + docstage + docrev;
+  }
+
+  // Update document name
+  if (e0.findText('##docfilename##')) {
+    e0.replaceText('##docfilename##', docfilename);
+  }
+  //else {
+  //  element.replaceText('^[a-zA-Z0-9\-\.]+', docfilename);
+  //}
+      
+  // Update the Working Draft ##, but only if this is a WD.
+  if (docstage === "wd") {
+    // Update document revision
+    if (e0.findText('##docrev##')) {
+      e0.replaceText('##docrev##', docrev);
+    }
+    //else if (element.findText('Working Draft [0-9]+')) {
+    //  var n = "Working Draft " + docrev;
+    //  element.replaceText('Working Draft [0-9]+', n);
+    //}
+    //else {
+      // Add the Working Draft ## back in if it is missing
+    //  var n = docfilename + "\tWorking Draft " + docrev + "\t##docdate##";
+    //  element.replaceText('^.*$', n);
+    //}
+  }
+  else {
+    // Remove the Working Draft ## for CSD, CS, CND, CN, but only if it is found
+    if (e0.findText('##docrev##')) {
+      e0.replaceText('Working Draft ##docrev##', "");
+    }
+    //else if (element.findText('Working Draft [0-9]+')) {
+    //  element.replaceText('Working Draft [0-9]+', "");
+    //}
+  }
+
+  // Update the document date
+  if (e0.findText('##docdate##')) {
+    e0.replaceText('##docdate##', docdate);
+  }
+  //else {
+  //  element.replaceText('\\d{2}\\s\\w+\\s\\d{4}$', docdate);
+  //}
+
+  
+  // Update the first line of the footer
+  e1 = paragraphs[1];
+  
+  // Update document track type (standards track, non-standards track, standards track draft, etc)
+  if (e1.findText('##doctrack##')) {
+    e1.replaceText('##doctrack##', doctrack);
+  }
+  //else if (element.findText('Non-Standards Track Draft')) {
+  //  element.replaceText('Non-Standards Track Draft', doctrack);
+  //}
+  //else if (element.findText('Non-Standards Track')) {
+  //  element.replaceText('Non-Standards Track', doctrack);
+  //}
+  //else if (element.findText('Standards Track Draft')) {
+  //  element.replaceText('Standards Track Draft', doctrack);
+  //}
+  //else if (element.findText('Standards Track')) {
+  //  element.replaceText('Standards Track', doctrack);
+  //}
+  
 }
